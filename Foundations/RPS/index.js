@@ -38,22 +38,25 @@ function getHumanChoise() {
     }
 }
 
-const humanChoise = getHumanChoise();
-const computerChoise = getComputerChoise();
 
-console.log(`Computer chose ${computerChoise}!`);
+for(let i = 0; i < 4; i++) {
+    const humanChoise = getHumanChoise();
+    const computerChoise = getComputerChoise();
 
-if(humanChoise === computerChoise) {
-    console.log("It's a tie!");
-} else if (
-    (humanChoise === 'rock' && computerChoise === 'paper') 
-    || (humanChoise === 'paper' && computerChoise === 'scissors') 
-    || (humanChoise === "scissors" && computerChoise === "rock")
-) {
-    computerScore++;
-} else {
-    humanScore++;
+    console.log(`Computer chose ${computerChoise}!`);
+
+    if(humanChoise === computerChoise) {
+        console.log("It's a tie!");
+    } else if (
+        (humanChoise === 'rock' && computerChoise === 'paper') 
+        || (humanChoise === 'paper' && computerChoise === 'scissors') 
+        || (humanChoise === "scissors" && computerChoise === "rock")
+    ) {
+        computerScore++;
+    } else {
+        humanScore++;
+    }
+
+    console.log(`Human score: ${humanScore}`);
+    console.log(`Computer score: ${computerScore}`);
 }
-
-console.log(`Human score: ${humanScore}`);
-console.log(`Computer score: ${computerScore}`);
