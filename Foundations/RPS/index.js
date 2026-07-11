@@ -1,62 +1,68 @@
-// human score
-// robot score
-
-// function getComputerChoise
-// Math.Random(1,3);
-// 1 - rock, 2 - paper, 3 - scicssors
-// 
-
-// function getHumanChoice 
-// ansewr = prompt("Rock, Paper or Scissors")
-
-// compare if computerChoise === humanChoise 
-//      play again
-// else update score
-
-const RPS = new Map();
-
-RPS.set("rock", 0);
-RPS.set("paper", 1);
-RPS.set("scissors", 2);
-
-let RPS_arr = ['rock', 'paper', 'scissors'];
+const RPS = ["rock", "paper", "scissors"];
 
 let humanScore = 0;
 let computerScore = 0;
 
-function getComputerChoise() {
-    return RPS_arr[Math.floor(Math.random() * 3)];
+function getComputerChoice() {
+    return RPS[Math.floor(Math.random() * 3)];
 }
 
-function getHumanChoise() {
-    const userChoise = prompt("Rock Paper or Scissors").toLowerCase();
-    if(!RPS.has(userChoise)) {
-        alert(`'${userChoise}' isn't a valid choise`);
-        return getHumanChoise();
-    } else {
-        return userChoise;
+function getHumanChoice() {
+    const userChoice = prompt("Rock, Paper or Scissors?").toLowerCase();
+
+    if (!RPS.includes(userChoice)) {
+        alert(`"${userChoice}" isn't a valid choice.`);
+        return getHumanChoice();
     }
+
+    return userChoice;
 }
 
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
 
-for(let i = 0; i < 4; i++) {
-    const humanChoise = getHumanChoise();
-    const computerChoise = getComputerChoise();
+async function playRound() {
+    const humanChoice = getHumanChoice();
+    const computerChoice = getComputerChoice();
 
-    console.log(`Computer chose ${computerChoise}!`);
+    console.log(`You chose ${humanChoice}.`);
+    console.log(`Computer chose ${computerChoice}.`);
 
-    if(humanChoise === computerChoise) {
+    if (humanChoice === computerChoice) {
         console.log("It's a tie!");
     } else if (
-        (humanChoise === 'rock' && computerChoise === 'paper') 
-        || (humanChoise === 'paper' && computerChoise === 'scissors') 
-        || (humanChoise === "scissors" && computerChoise === "rock")
+        (humanChoice === "rock" && computerChoice === "paper") ||
+        (humanChoice === "paper" && computerChoice === "scissors") ||
+        (humanChoice === "scissors" && computerChoice === "rock")
     ) {
         computerScore++;
+        console.log("Computer wins this round!");
     } else {
         humanScore++;
+        console.log("You win this round!");
     }
 
     console.log(`Human score: ${humanScore}`);
     console.log(`Computer score: ${computerScore}`);
+
+    await sleep(5000);
 }
+
+async function playGame(){
+    humanScore = 0;
+    computerScore = 0;
+
+    for(let i = 0; i < 5; i++) {
+        await playRound();
+        console.clear();
+    }
+
+    console.log("\nGame Over!");
+
+    if(humanScore > computerScore) console.log("You've won!");
+    else if (computerScore > humanScore) console.log("Computer won!");
+    else console.log("ggz");
+}
+
+playGame();
