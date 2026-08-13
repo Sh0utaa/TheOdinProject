@@ -7,62 +7,60 @@ function getComputerChoice() {
     return RPS[Math.floor(Math.random() * 3)];
 }
 
-function getHumanChoice() {
-    const userChoice = prompt("Rock, Paper or Scissors?").toLowerCase();
+const rps_btns = document.querySelectorAll(".rps_btn");
 
-    if (!RPS.includes(userChoice)) {
-        alert(`"${userChoice}" isn't a valid choice.`);
-        return getHumanChoice();
-    }
+rps_btns.forEach(button => {
+    button.addEventListener("click", () => {
+        playRound(button.innerHTML.toLowerCase());
+    });
+});
 
-    return userChoice;
-}
-
-function sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-}
-
-async function playRound() {
-    const humanChoice = getHumanChoice();
+function playRound(humanChoice) {
     const computerChoice = getComputerChoice();
 
-    console.log(`You chose ${humanChoice}.`);
-    console.log(`Computer chose ${computerChoice}.`);
+    const display = document.querySelector("#display");
+    const human_score = document.querySelector("#human_score");
+    const computer_score = document.querySelector("#computer_score");
+
+    display.innerHTML = `
+        <p>You chose ${humanChoice}.</p>
+        <p>Computer chose ${computerChoice}.</p>
+    `;
 
     if (humanChoice === computerChoice) {
-        console.log("It's a tie!");
-    } else if (
-        (humanChoice === "rock" && computerChoice === "paper") ||
-        (humanChoice === "paper" && computerChoice === "scissors") ||
-        (humanChoice === "scissors" && computerChoice === "rock")
+        display.innerHTML += `<p>It's a tie!</p>`;
+    } 
+    
+    else if (
+        (humanChoice === "rock" && computerChoice === "scissors") ||
+        (humanChoice === "paper" && computerChoice === "rock") ||
+        (humanChoice === "scissors" && computerChoice === "paper")
     ) {
-        computerScore++;
-        console.log("Computer wins this round!");
-    } else {
         humanScore++;
-        console.log("You win this round!");
+        display.innerHTML += `<p>You win this round!</p>`;
+    } 
+    
+    else {
+        computerScore++;
+        display.innerHTML += `<p>Computer wins this round!</p>`;
     }
 
-    console.log(`Human score: ${humanScore}`);
-    console.log(`Computer score: ${computerScore}`);
+    human_score.textContent = `Human: ${humanScore}`;
+    computer_score.textContent = `Computer: ${computerScore}`;
 
-    await sleep(5000);
-}
-
-async function playGame(){
-    humanScore = 0;
-    computerScore = 0;
-
-    for(let i = 0; i < 5; i++) {
-        await playRound();
-        console.clear();
+    if (humanScore === 5) {
+        display.innerHTML += `<h2>You won the game! 🎉</h2>`;
+        endGame();
+    } 
+    
+    else if (computerScore === 5) {
+        display.innerHTML += `<h2>Computer won the game!</h2>`;
+        endGame();
     }
-
-    console.log("\nGame Over!");
-
-    if(humanScore > computerScore) console.log("You've won!");
-    else if (computerScore > humanScore) console.log("Computer won!");
-    else console.log("ggz");
 }
 
-playGame();
+function endGame() {
+    rps_btns.forEach(button => {
+        button.disabled = true;
+    });
+}
